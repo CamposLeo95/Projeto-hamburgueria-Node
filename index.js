@@ -20,35 +20,30 @@ const checkId = (req, res, next)=>{
     req.useIndex = index
 
     next()
-
 }
 
-// - OK
-app.get('/order', (req, res) =>{
-
-    return res.json(orders)
-})
-
-// - OK
-app.get('/order/:id', checkId, (req, res) =>{
-    const id = req.useId
-    const pedido = orders.filter(order => order.id == id)
-
-    return res.json(pedido)
-})
-
-// - OK
 app.post('/order', (req, res) =>{
 
     const {order, clientName, price} = req.body  
 
     orders.push({id: uuidv4(), order, clientName, price, status: "Em preparação"})
 
-    return res.json({mensage: 'Pedido realizado'})
+    return res.status(201).json({mensage: 'Pedido realizado'})
 
 })
 
-// - OK
+app.get('/order', (req, res) =>{
+
+    return res.status(200).json(orders)
+})
+
+app.get('/order/:id', checkId, (req, res) =>{
+    const id = req.useId
+    const pedido = orders.filter(order => order.id == id)
+
+    return res.status(200).json(pedido)
+})
+
 app.put('/order/:id', checkId, (req, res) =>{
     const id = req.useId
     const index = req.useIndex
@@ -60,7 +55,6 @@ app.put('/order/:id', checkId, (req, res) =>{
     return res.json({mensage: 'Pedido alterado'})
 })
 
-// - OK
 app.patch('/order/:id', checkId, (req, res) =>{
     const index =req.useIndex
 
@@ -69,7 +63,6 @@ app.patch('/order/:id', checkId, (req, res) =>{
     return res.json({mensage: 'Pedido pronto'})
 })
 
-// - OK
 app.delete('/order/:id', checkId, (req, res) =>{
     const index = req.useIndex
 
